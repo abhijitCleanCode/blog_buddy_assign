@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const navItems = [
     { label: "Home", href: "/" },
-    { label: "All Blogs", href: "/blogs" },
+    { label: "All Blogs", href: "/blog" },
 ]
 
 const Header = () => {
