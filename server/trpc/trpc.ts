@@ -1,0 +1,19 @@
+// core trpc configuration file
+import { initTRPC } from "@trpc/server";
+import { ZodError } from "zod";
+
+// creat a trpc instance
+const t = initTRPC.create({
+    errorFormatter({ shape, error }) {
+        return {
+            ...shape,
+            data: {
+                ...shape.data,
+                zodError: error.cause instanceof ZodError ? error.cause.message : null,
+            }
+        }
+    }
+});
+
+export const router = t.router;
+export const publicProcedure = t.procedure;

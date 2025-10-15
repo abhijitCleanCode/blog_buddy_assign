@@ -3,6 +3,7 @@
 import { useSidebar } from "@/providers/sidebar-provider";
 import TitleSection from "./TitleSection";
 import Menu from "./Menu";
+import ToggleClose from "./ToggleClose";
 
 export default function Sidebar() {
     const { isOpen, toggleSidebar } = useSidebar();
@@ -17,6 +18,8 @@ export default function Sidebar() {
             <TitleSection open={isOpen} />
 
             <Menu isOpen={isOpen} />
+
+            <ToggleClose />
         </aside>
     )
 }

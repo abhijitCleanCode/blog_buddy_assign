@@ -1,5 +1,6 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface OptionProps {
     Icon: LucideIcon; // Type for icons imported from lucide-react
@@ -12,15 +13,15 @@ interface OptionProps {
 }
 
 const Option: React.FC<OptionProps> = ({
-Icon,
-title,
-// selected,
-// setSelected,
-open,
-href,
+    Icon,
+    title,
+    // selected,
+    // setSelected,
+    open,
+    href = "/",
 }) => {
 
-    const handleClick = () => {}
+    const handleClick = () => { }
 
     return (
         <button
@@ -32,9 +33,11 @@ href,
             </div>
 
             {open && (
-                <span className={`text-sm font-medium transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>
-                    {title}
-                </span>
+                <Link href={href}>
+                    <span className={`text-sm font-medium transition-opacity duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>
+                        {title}
+                    </span>
+                </Link>
             )}
         </button>
     )

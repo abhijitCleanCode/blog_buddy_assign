@@ -25,7 +25,7 @@ export default function DashboardLayoutClient({
                 <header className="sticky top-0 z-10">
                     <DashboardNavbar />
                 </header>
-                <div className="flex pt-8 pb-8 px-4 sm:px-8">{children}</div>
+                <div className="pt-8 pb-8 px-4 sm:px-8">{children}</div>
             </main>
             <footer
                 className={cn(

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
 import "./globals.css";
+import {TRPCProvider} from "@/providers/trpc-provider";
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -25,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} font-poppins antialiased`}
       >
-        {children}
+      <TRPCProvider>{children}</TRPCProvider>
       </body>
     </html>
   );
