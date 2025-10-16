@@ -18,4 +18,9 @@ export class CategoryService {
 
     return newCategory;
   }
+
+  static async delete(id: string) {
+    await db.delete(categories).where(eq(categories.id, id));
+    return {success: true};
+  }
 }

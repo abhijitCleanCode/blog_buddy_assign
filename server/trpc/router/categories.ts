@@ -11,4 +11,6 @@ export const categoriesRouter = router({
     getAll: publicProcedure.query(CategoryService.getAll),
 
     create: publicProcedure.input(createCategorySchema).mutation(async ({ input }) => CategoryService.create(input)),
+
+    delete: publicProcedure.input(z.object({ id: z.string() })).mutation(async ({ input }) => CategoryService.delete(input.id)),
 })
