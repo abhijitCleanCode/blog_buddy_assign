@@ -19,8 +19,33 @@ export class CategoryService {
     return newCategory;
   }
 
+  static async update(data: { id: string; name?: string; description?: string }) {
+    const updates: Record<string, any> = {};
+
+    if (data.name) {
+      updates.name = data.name;
+      updates.slug = generateSlug(data.name);
+    }
+
+    if (data.description) {
+      updates.description = data.description;
+    }
+
+    if (Object.keys(updates).length === 0) {
+      throw new Error("No fields provided to update");
+    }
+
+    const [updated] = await db
+      .update(categories)
+      .set(updates)
+      .where(eq(categories.id, data.id))
+      .returning();
+
+    return updated;
+  }
+
   static async delete(id: string) {
     await db.delete(categories).where(eq(categories.id, id));
-    return {success: true};
+    return { success: true };
   }
 }

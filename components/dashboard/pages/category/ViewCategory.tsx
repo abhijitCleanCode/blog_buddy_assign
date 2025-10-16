@@ -6,13 +6,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc/trpc-client";
-import { Loader2, Trash } from "lucide-react";
+import { Edit, Loader2, Trash } from "lucide-react";
 import { toast } from "react-toastify";
+import FormEditCategory from "./FormEditCategory";
 
 type Category = {
     id: string;
     name: string;
-    description?: string | null;
+    description?: string;
 };
 
 function addEllipses(str: string, maxLength: number) {
@@ -48,13 +49,30 @@ const ViewCategory = () => {
         }
     };
 
+    const { mutate: updateCategory, isPending: isUpdating } = trpc.categories.update.useMutation({
+        onSuccess: () => {
+            utils.categories.getAll.invalidate();
+            toast.success("Category updated!");
+            setEditingCategory(null);
+        },
+        onError: (error) => {
+            toast.error(error.message ?? "Failed to update category!");
+        },
+    })
+
+    const handleUpdateCategory = (data: Category) => {
+        if (editingCategory) {
+            updateCategory({ ...data, id: editingCategory.id });
+        }
+    }
+
     return (
         <>
-            <section className="bg-white/20 backdrop-blur-xl p-5">
+            <section className="">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categories?.map((category) => (
                         <div key={category.id}>
-                            <Card className="cursor-pointer transition-all duration-300 border bg-white/60 backdrop-blur-sm hover:bg-white/70">
+                            <Card className="cursor-pointer border bg-white/60 backdrop-blur-sm hover:bg-white/70">
                                 <CardContent className="p-5">
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between">
@@ -62,7 +80,15 @@ const ViewCategory = () => {
                                                 {category.name}
                                             </h4>
 
-                                            <div>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    onClick={() => setEditingCategory(category)}
+                                                    variant="outline"
+                                                    size="icon"
+                                                    className="border border-blue-100"
+                                                >
+                                                    <Edit className="text-blue-100" />
+                                                </Button>
                                                 <Button
                                                     onClick={() => {
                                                         setSelectedCategoryId(category.id);
@@ -126,6 +152,18 @@ const ViewCategory = () => {
                         </Button>
                     </div>
                 </div>
+            </AnimatedModal>
+
+            <AnimatedModal
+                openModal={!!editingCategory}
+                setOpenModal={() => setEditingCategory(null)}
+                title="Edit Category"
+            >
+                {editingCategory && (
+                    <FormEditCategory
+                        category={editingCategory}
+                    />
+                )}
             </AnimatedModal>
         </>
     );
