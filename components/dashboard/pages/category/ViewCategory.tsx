@@ -26,7 +26,7 @@ const ViewCategory = () => {
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
     const { data: categories, isLoading: loadingCategories } =
-        trpc.categories.getAll.useQuery();
+        trpc.categories.getAll.useQuery(undefined, { suspense: true });
     console.log(categories);
 
     const utils = trpc.useUtils();
@@ -48,23 +48,6 @@ const ViewCategory = () => {
             deleteCategory({ id: selectedCategoryId });
         }
     };
-
-    const { mutate: updateCategory, isPending: isUpdating } = trpc.categories.update.useMutation({
-        onSuccess: () => {
-            utils.categories.getAll.invalidate();
-            toast.success("Category updated!");
-            setEditingCategory(null);
-        },
-        onError: (error) => {
-            toast.error(error.message ?? "Failed to update category!");
-        },
-    })
-
-    const handleUpdateCategory = (data: Category) => {
-        if (editingCategory) {
-            updateCategory({ ...data, id: editingCategory.id });
-        }
-    }
 
     return (
         <>

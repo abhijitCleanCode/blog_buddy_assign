@@ -47,6 +47,7 @@ const FormAddCategory = () => {
     })
 
     const handleSubmit = async (data: handleSubmitDataProps) => {
+        console.log(data);
         createCategory(data);
     }
 

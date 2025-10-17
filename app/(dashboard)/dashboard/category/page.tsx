@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -9,10 +9,7 @@ import { SkeletonCard } from "@/components/skeleton";
 import AnimatedModal from "@/components/AnimatedModal";
 import FormAddCategory from "@/components/dashboard/pages/category/FormAddCategory";
 
-const LazyViewCategory = dynamic(() => import("@/components/dashboard/pages/category/ViewCategory"), {
-    ssr: false,
-    loading: () => <SkeletonCard />,
-})
+const LazyViewCategory = dynamic(() => import("@/components/dashboard/pages/category/ViewCategory"), { ssr: false, loading: () => <SkeletonCard /> });
 
 const Page = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
@@ -33,7 +30,9 @@ const Page = () => {
                     </Button>
                 </div>
 
-                <LazyViewCategory />
+                <Suspense fallback={<SkeletonCard />}>
+                    <LazyViewCategory />
+                </Suspense>
             </section>
 
             <AnimatedModal
