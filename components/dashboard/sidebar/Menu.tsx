@@ -12,7 +12,6 @@ const Menu = ({ isOpen }: { isOpen: boolean }) => {
                     <Option Icon={File} title={'Post'} open={isOpen} href={"/dashboard/post"} />
                     <Option Icon={Plus} title={'Add Post'} open={isOpen} href={"/dashboard/add-post"} />
                     <Option Icon={Tags} title={'Category'} open={isOpen} href={"/dashboard/category"} />
-                    <Option Icon={SquarePen} title={'Category'} open={isOpen} href={"/dashboard/category"} />
                 </ul>
             </nav>
         </ScrollArea>

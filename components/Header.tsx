@@ -4,6 +4,7 @@ import Image from "next/image";
 const navItems = [
     { label: "Home", href: "/" },
     { label: "All Blogs", href: "/blog" },
+    { label: "Dashboard", href: "/dashboard" },
 ]
 
 const Header = () => {
