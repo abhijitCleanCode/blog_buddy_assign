@@ -1,6 +1,6 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Option from "@/components/dashboard/sidebar/Option";
-import { Home, File, Tags, FilePenLine, SquarePen, LaptopMinimal } from "lucide-react";
+import { Home, File, Tags, SquarePen, LaptopMinimal, Plus } from "lucide-react";
 
 const Menu = ({ isOpen }: { isOpen: boolean }) => {
     return (
@@ -10,7 +10,7 @@ const Menu = ({ isOpen }: { isOpen: boolean }) => {
                     <Option Icon={Home} title={'Dashboard'} open={isOpen} href={"/dashboard"} />
                     <Option Icon={LaptopMinimal} title={'View Site'} open={isOpen} href={"/"} />
                     <Option Icon={File} title={'Post'} open={isOpen} href={"/dashboard/post"} />
-                    <Option Icon={FilePenLine} title={'Edit Post'} open={isOpen} href={"/dashboard/post"} />
+                    <Option Icon={Plus} title={'Add Post'} open={isOpen} href={"/dashboard/add-post"} />
                     <Option Icon={Tags} title={'Category'} open={isOpen} href={"/dashboard/category"} />
                     <Option Icon={SquarePen} title={'Category'} open={isOpen} href={"/dashboard/category"} />
                 </ul>

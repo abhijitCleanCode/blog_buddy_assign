@@ -13,4 +13,8 @@ export const postRouter = router({
     delete: publicProcedure
     .input(z.object({ id: z.string() }))
     .mutation(({ input }) => PostService.delete(input.id)),
+
+    getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ input }) => PostService.getById(input.id)),
 });

@@ -1,28 +1,27 @@
 "use client"
 
-import React, { Suspense, useState } from 'react'
+import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import AnimatedModal from "@/components/AnimatedModal";
-import FormAddPost from '@/components/dashboard/pages/post/FormAddPost';
 import { SkeletonCard } from '@/components/skeleton';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 
 const LazyViewPost = dynamic(() => import("@/components/dashboard/pages/post/ViewPost"), { ssr: false, loading: () => <SkeletonCard /> })
 
 const Page = () => {
-    const [openModal, setOpenModal] = useState<boolean>(false);
+    const router = useRouter();
 
     return (
         <>
             <section>
                 <div className='flex items-center justify-between mb-16'>
-                    <article className=''>
+                    <article>
                         <h1 className='header'>Posts</h1>
                     </article>
 
                     <Button
-                        onClick={() => setOpenModal(true)}
+                        onClick={() => router.push("/dashboard/add-post")}
                         className="bg-blue-100 text-white hover:bg-blue-600"
                     >
                         <Plus color="#fff" size={24} /> Add post
@@ -33,14 +32,6 @@ const Page = () => {
                     <LazyViewPost />
                 </Suspense>
             </section>
-
-            <AnimatedModal
-                openModal={openModal}
-                setOpenModal={setOpenModal}
-                title="Create Post"
-            >
-                <FormAddPost />
-            </AnimatedModal>
         </>
     )
 }

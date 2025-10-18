@@ -6,17 +6,17 @@ import React from "react";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import CustomFormField from "@/components/CustomFormField";
 import { FormFieldType } from "@/lib/helper";
 
-import MarkdownEditor from "@/components/editor/MarkdownEditor";
 import { trpc } from "@/lib/trpc/trpc-client";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { SelectItem } from "@/components/ui/select";
 import MultiSelect from "@/components/MultiSelect";
+import Editor from "@/components/editor/Editor";
 
 const formSchema = z.object({
   title: z.string().min(3),
@@ -64,7 +64,7 @@ const FormAddPost = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="mt-6 space-y-6 flex flex-col justify-center"
+        className="mt-6 space-y-6 flex flex-col justify-center w-full md:w-1/2"
       >
         <CustomFormField
           control={form.control}
@@ -73,19 +73,25 @@ const FormAddPost = () => {
           label="Enter post title"
         />
 
-        <div>
-          <label className="block text-sm font-medium mb-1">
-            Content (Markdown)
-          </label>
-          <MarkdownEditor
-            value={form.watch("content")}
-            onChange={(val) => form.setValue("content", val)}
+        <div className="h-[512px] overflow-y-auto">
+          <FormField
+            control={form.control}
+            name="content"
+            render={({ field }) => (
+              <FormItem className="flex flex-col w-full gap-3">
+                <FormLabel className="">Content</FormLabel>
+
+                <FormControl className="mt-2">
+                  <Editor
+                    value={field.value}
+                    fieldChange={field.onChange}
+                  />
+                </FormControl>
+
+                <FormMessage className="text-rose-500 animate-pulse" />
+              </FormItem>
+            )}
           />
-          {form.formState.errors.content && (
-            <p className="text-rose-500 text-sm mt-1">
-              {form.formState.errors.content.message}
-            </p>
-          )}
         </div>
 
         <Controller
@@ -117,10 +123,9 @@ const FormAddPost = () => {
         <Button
           type="submit"
           className="bg-blue-100 text-white hover:bg-blue-600"
-        // disabled={isPending}
+          disabled={isPending}
         >
-          {/* {isPending ? <Loader2 className='animate-spin' /> : "Create"} */}
-          Create
+          {isPending ? <Loader2 className='animate-spin' /> : "Create"}
         </Button>
       </form>
     </Form>

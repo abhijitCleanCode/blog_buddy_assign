@@ -5,13 +5,16 @@ import { Badge } from '@/components/ui/badge';
 import { trpc } from '@/lib/trpc/trpc-client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, Trash } from 'lucide-react';
+import { Eye, Loader2, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AnimatedModal from '@/components/AnimatedModal';
+import { useRouter } from 'next/navigation';
 
 const ViewPost = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+
+    const router = useRouter();
 
     const { data: posts } = trpc.post.getAll.useQuery(undefined, { suspense: true });
     console.log(posts);
@@ -58,7 +61,17 @@ const ViewPost = () => {
                                                 size="icon"
                                                 className="border border-rose-500"
                                             >
-                                                <Trash className="text-blue-100" />
+                                                <Trash className="text-rose-500" />
+                                            </Button>
+                                            <Button
+                                                onClick={() => {
+                                                    router.push(`/dashboard/post/${post.id}`);
+                                                }}
+                                                variant="outline"
+                                                size="icon"
+                                                className="border border-green-500"
+                                            >
+                                                <Eye className="text-green-500" />
                                             </Button>
                                         </div>
                                     </div>

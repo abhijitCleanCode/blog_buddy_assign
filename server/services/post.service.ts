@@ -1,5 +1,5 @@
 import { db } from "@/database/drizzle";
-import { posts } from "@/database/schema";
+import { categories, posts } from "@/database/schema";
 import { postCategories } from "@/database/schema";
 import { eq, inArray } from "drizzle-orm";
 import { generateSlug } from "@/lib/helper";
@@ -59,5 +59,23 @@ export class PostService {
             .returning();
 
         return deleted;
+    }
+
+    static async getById(id: string) {
+        console.log("get by id :: ", id);
+
+        const post = await db.query.posts.findFirst({
+            where: eq(posts.id, id),
+            with: {
+                postCategories: { with: { category: true } },
+            }
+        });
+
+        if (!post) return null;
+
+        return {
+            ...post,
+            categories: post.postCategories.map((pc) => pc.category),
+        }
     }
 }
