@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ThemeToggle from "./ThemeToggle";
 
 const navItems = [
     { label: "Home", href: "/" },
@@ -20,6 +21,8 @@ const Header = () => {
                         <Link href={item.href}>{item.label}</Link>
                     </li>
                 ))}
+
+                <ThemeToggle />
             </ul>
         </header>
     )
