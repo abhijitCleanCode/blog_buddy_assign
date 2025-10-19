@@ -1,22 +1,20 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
-import { useParams } from "next/navigation";
-import { trpc } from "@/lib/trpc/trpc-client";
-import ContentRenderer from "@/components/ContentRenderer";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import Loader from "@/components/Loaer";
+import { useParams } from 'next/navigation';
+import { trpc } from '@/lib/trpc/trpc-client';
+import ContentRenderer from '@/components/ContentRenderer';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Loader from '@/components/Loaer';
 
 const Page = () => {
-    const params = useParams<{ postId: string }>();
-    const postId = params.postId;
+    const params = useParams<{ id: string }>();
+    const postId = params.id;
 
-    const input = useMemo(() => ({ id: postId }), [postId]);
+    const input = useMemo(() => ({ id: postId }), [postId])
 
     const { data: post, isLoading } = trpc.post.getById.useQuery(input);
-
-    console.log(post);
 
     if (isLoading) {
         return (
@@ -34,7 +32,7 @@ const Page = () => {
                 <p className="leading-tight tracking-tight text-dark-600 mt-4">slug: {post?.slug}</p>
             </article>
 
-            <article className="p-7">
+            <article className='p-7'>
                 <ContentRenderer content={post?.content ?? ""} />
             </article>
 
@@ -72,7 +70,7 @@ const Page = () => {
                 ))}
             </div>
         </section>
-    );
-};
+    )
+}
 
-export default Page;
+export default Page

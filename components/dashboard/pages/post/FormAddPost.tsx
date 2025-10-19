@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 // form imports
 import * as z from "zod";
@@ -26,11 +26,14 @@ const formSchema = z.object({
 });
 
 const FormAddPost = () => {
+  const [submitType, setSubmitType] = useState<"draft" | "publish">("publish");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
       content: "",
+      published: false,
       categoryIds: [],
     },
   });
@@ -56,8 +59,10 @@ const FormAddPost = () => {
   })
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    createPost(data);
+    createPost({
+      ...data,
+      published: submitType === "publish",
+    });
   };
 
   return (
@@ -120,13 +125,33 @@ const FormAddPost = () => {
           )}
         />
 
-        <Button
-          type="submit"
-          className="bg-blue-100 text-white hover:bg-blue-600"
-          disabled={isPending}
-        >
-          {isPending ? <Loader2 className='animate-spin' /> : "Create"}
-        </Button>
+        <div className="flex items-center gap-4">
+          <Button
+            type="submit"
+            className="bg-gray-700 text-white hover:bg-gray-800"
+            disabled={isPending}
+            onClick={() => setSubmitType("draft")}
+          >
+            {isPending && submitType === "draft" ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Save as Draft"
+            )}
+          </Button>
+
+          <Button
+            type="submit"
+            className="bg-blue-600 text-white hover:bg-blue-700"
+            disabled={isPending}
+            onClick={() => setSubmitType("publish")}
+          >
+            {isPending && submitType === "publish" ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Create Post"
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );

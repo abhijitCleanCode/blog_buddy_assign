@@ -1,7 +1,7 @@
 import { db } from "@/database/drizzle";
 import { categories, posts } from "@/database/schema";
 import { postCategories } from "@/database/schema";
-import { eq, inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { generateSlug } from "@/lib/helper";
 import * as z from "zod";
 
@@ -38,19 +38,39 @@ export class PostService {
         return post;
     }
 
-    static async getAll() {
+    static async getAll(published?: boolean, categoryId?: string) {
+        // Build filters dynamically
+        const whereClauses = [];
+
+        if (typeof published === "boolean") {
+            whereClauses.push(eq(posts.published, published));
+        }
+
+        if (categoryId) {
+            whereClauses.push(
+                inArray(
+                    posts.id,
+                    db
+                        .select({ postId: postCategories.postId })
+                        .from(postCategories)
+                        .where(eq(postCategories.categoryId, categoryId))
+                )
+            );
+        }
+
         const result = await db.query.posts.findMany({
+            where: and(...whereClauses),
             with: {
                 postCategories: {
                     with: { category: true },
                 },
             },
+            orderBy: (posts, { desc }) => [desc(posts.createdAt)], // newest first
         });
-
-        console.log(result);
 
         return result;
     }
+
 
     static async delete(id: string) {
         const [deleted] = await db
@@ -77,5 +97,41 @@ export class PostService {
             ...post,
             categories: post.postCategories.map((pc) => pc.category),
         }
+    }
+
+    static async update(input: {
+        id: string;
+        title: string;
+        content: string;
+        published?: boolean;
+        categoryIds: string[];
+    }) {
+        const slug = generateSlug(input.title);
+
+        const [updatedPost] = await db
+            .update(posts)
+            .set({
+                title: input.title,
+                slug,
+                content: input.content,
+                published: input.published ?? false,
+            })
+            .where(eq(posts.id, input.id))
+            .returning();
+
+        if (!updatedPost) throw new Error("Post update failed");
+
+        // Update category relations
+        await db.delete(postCategories).where(eq(postCategories.postId, input.id));
+
+        if (input.categoryIds.length > 0) {
+            const links = input.categoryIds.map((categoryId) => ({
+                postId: input.id,
+                categoryId,
+            }));
+            await db.insert(postCategories).values(links);
+        }
+
+        return updatedPost;
     }
 }

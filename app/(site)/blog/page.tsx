@@ -1,7 +1,27 @@
+"use client"
+
+import React, { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import { SkeletonCard } from '@/components/skeleton';
+
+const LazyViewBlogs = dynamic(() => import("@/components/allBlogs/ViewBlogs"), {
+    loading: () => <SkeletonCard />
+})
+
 const Page = () => {
     return (
         <>
-            <h2>All blog page. List out the blog here with pagination</h2>
+            <section>
+                <div className='flex items-center justify-between mb-16'>
+                    <article>
+                        <h1 className='header'>All Blogs</h1>
+                    </article>
+                </div>
+
+                <Suspense fallback={<SkeletonCard />}>
+                    <LazyViewBlogs />
+                </Suspense>
+            </section>
         </>
     )
 }

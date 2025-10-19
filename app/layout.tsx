@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 
 import "./globals.css";
 import { TRPCProvider } from "@/providers/trpc-provider";
+import ThemeProviders from "@/providers/theme-providers";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -24,17 +25,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${poppins.variable} font-poppins antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem={true}
-        >
-          <TRPCProvider>{children}</TRPCProvider>
-        </ThemeProvider>
+          <TRPCProvider>
+            <ThemeProviders>
+              {children}
+            </ThemeProviders>
+          </TRPCProvider>
       </body>
     </html>
   );

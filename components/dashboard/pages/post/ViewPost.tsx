@@ -5,18 +5,26 @@ import { Badge } from '@/components/ui/badge';
 import { trpc } from '@/lib/trpc/trpc-client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Eye, Loader2, Trash } from 'lucide-react';
+import { Eye, FileEdit, Loader2, Trash } from 'lucide-react';
 import { toast } from 'react-toastify';
 import AnimatedModal from '@/components/AnimatedModal';
 import { useRouter } from 'next/navigation';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const ViewPost = () => {
     const [openModal, setOpenModal] = useState<boolean>(false);
     const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+    const [filter, setFilter] = useState<"all" | "published" | "draft">("all");
 
     const router = useRouter();
 
-    const { data: posts } = trpc.post.getAll.useQuery(undefined, { suspense: true });
+    const publishedFilter =
+        filter === "all" ? undefined : filter === "published" ? true : false;
+
+    const { data: posts, isLoading } = trpc.post.getAll.useQuery(
+        { published: publishedFilter },
+        { suspense: true }
+    );
     console.log(posts);
 
     const utils = trpc.useUtils();
@@ -30,7 +38,7 @@ const ViewPost = () => {
         onError: (error) => {
             toast.error(error.message ?? "Failed to delete post!");
         },
-    })
+    });
 
     const handleConfirmDelete = () => {
         if (selectedPostId) {
@@ -40,7 +48,21 @@ const ViewPost = () => {
 
     return (
         <>
-            <section>
+            <section className='space-y-6'>
+                <Tabs
+                    value={filter}
+                    onValueChange={(value) =>
+                        setFilter(value as "all" | "published" | "draft")
+                    }
+                    className="w-full"
+                >
+                    <TabsList className="flex justify-start gap-2">
+                        <TabsTrigger value="all">All</TabsTrigger>
+                        <TabsTrigger value="published">Published</TabsTrigger>
+                        <TabsTrigger value="draft">Draft</TabsTrigger>
+                    </TabsList>
+                </Tabs>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {posts?.map((post) => (
                         <Card key={post.id} className="cursor-pointer border bg-white/60 backdrop-blur-sm hover:bg-white/70">
@@ -72,6 +94,16 @@ const ViewPost = () => {
                                                 className="border border-green-500"
                                             >
                                                 <Eye className="text-green-500" />
+                                            </Button>
+                                            <Button
+                                                onClick={() => {
+                                                    router.push(`/dashboard/post/edit/${post.id}`);
+                                                }}
+                                                variant="outline"
+                                                size="icon"
+                                                className="border border-yellow-500"
+                                            >
+                                                <FileEdit className="text-yellow-500" />
                                             </Button>
                                         </div>
                                     </div>
