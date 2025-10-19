@@ -2,8 +2,6 @@ import React from "react";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
-import { ThemeProvider } from "next-themes";
-
 import "./globals.css";
 import { TRPCProvider } from "@/providers/trpc-provider";
 import ThemeProviders from "@/providers/theme-providers";
