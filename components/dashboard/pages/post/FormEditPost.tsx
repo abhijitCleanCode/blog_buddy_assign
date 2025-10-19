@@ -14,6 +14,36 @@ import { Button } from '@/components/ui/button';
 import MultiSelect from '@/components/MultiSelect';
 import Editor from '@/components/editor/Editor';
 
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  slug: string;
+  createdAt: string | null;
+}
+
+interface PostCategory {
+  postId: string;
+  categoryId: string;
+  category: Category;
+}
+
+interface Post {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  published: boolean;
+  createdAt: string | null;
+  categories: Category[];
+  postCategories: PostCategory[];
+}
+
+interface FormEditPostProps {
+  post: Post | null | undefined;
+}
+
+
 const formSchema = z.object({
     title: z.string().min(3),
     content: z.string().min(10),
@@ -21,18 +51,18 @@ const formSchema = z.object({
     categoryIds: z.array(z.string()).nonempty("Select at least one category"),
 });
 
-const FormEditPost = ({ post }: { post: any }) => {
+const FormEditPost = ({ post }: FormEditPostProps) => {
     const [submitType, setSubmitType] = useState<"draft" | "publish">(
-        post.published ? "publish" : "draft"
+        post?.published ? "publish" : "draft"
     );
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            title: post.title,
-            content: post.content,
-            published: post.published,
-            categoryIds: post.postCategories?.map((pc: any) => pc.categoryId) ?? [],
+            title: post?.title,
+            content: post?.content,
+            published: post?.published,
+            categoryIds: post?.postCategories?.map((pc: any) => pc.categoryId) ?? [],
         },
     });
 
@@ -59,7 +89,7 @@ const FormEditPost = ({ post }: { post: any }) => {
 
     const handleSubmit = (data: z.infer<typeof formSchema>) => {
         updatePost({
-            id: post.id,
+            id: post?.id ?? "",
             ...data,
             published: submitType === "publish",
         });
@@ -150,7 +180,7 @@ const FormEditPost = ({ post }: { post: any }) => {
                     </Button>
 
                     {/* ✅ New Publish Button */}
-                    {!post.published && (
+                    {!post?.published && (
                         <Button
                             type="button"
                             className="bg-green-600 text-white hover:bg-green-700"
@@ -158,7 +188,7 @@ const FormEditPost = ({ post }: { post: any }) => {
                             onClick={() => {
                                 const data = form.getValues();
                                 updatePost({
-                                    id: post.id,
+                                    id: post?.id ?? "",
                                     ...data,
                                     published: true,
                                 });
