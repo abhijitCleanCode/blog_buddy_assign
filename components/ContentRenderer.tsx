@@ -11,12 +11,12 @@ interface contentRendererProps {
 
 const ContentRenderer = ({ content }: contentRendererProps) => {
     return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw, rehypeSanitize]}
-    >
-      {content}
-    </ReactMarkdown>
+        <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, rehypeSanitize]}
+        >
+            {content}
+        </ReactMarkdown>
     )
 }
 

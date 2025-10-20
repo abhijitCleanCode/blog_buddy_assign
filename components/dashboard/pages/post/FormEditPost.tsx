@@ -62,7 +62,7 @@ const FormEditPost = ({ post }: FormEditPostProps) => {
             title: post?.title,
             content: post?.content,
             published: post?.published,
-            categoryIds: post?.postCategories?.map((pc: any) => pc.categoryId) ?? [],
+            categoryIds: post?.postCategories?.map((pc: { categoryId: string }) => pc.categoryId) ?? [],
         },
     });
 

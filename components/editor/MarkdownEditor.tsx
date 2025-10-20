@@ -18,7 +18,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
 
     return (
         <div className="w-full">
-            <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
+            {/* <Tabs value={tab} onValueChange={(v) => setTab(v as any)}>
                 <TabsList className="mb-3">
                     <TabsTrigger value="edit">Edit</TabsTrigger>
                     <TabsTrigger value="preview">Preview</TabsTrigger>
@@ -42,9 +42,9 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
                         ) : (<p className='text-muted-foreground'>Nothing to preview yet</p>)}
                     </div>
                 </TabsContent>
-            </Tabs>
+            </Tabs> */}
         </div>
     )
 }
 
-export default MarkdownEditor
+export default MarkdownEditor;
