@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { SkeletonCard } from '@/components/skeleton';
 
 const LazyViewBlogs = dynamic(() => import("@/components/allBlogs/ViewBlogs"), {
+    ssr: false,
     loading: () => <SkeletonCard />
 })
 
