@@ -1,6 +1,12 @@
-import React from "react"
+"use client"
 
-import FormAddPost from "@/components/dashboard/pages/post/FormAddPost";
+import React, { Suspense } from "react";
+import dynamic from "next/dynamic";
+import { SkeletonForm } from "@/components/skeleton";
+
+const LazyFormAddPost = dynamic(() => import("@/components/dashboard/pages/post/FormAddPost"), {
+ ssr: false, loading: () => <SkeletonForm />
+})
 
 const Page = () => {
 
@@ -12,7 +18,9 @@ const Page = () => {
         </article>
       </div>
 
-      <FormAddPost />
+    <Suspense fallback={<SkeletonForm />}>
+      <LazyFormAddPost />
+      </Suspense>
     </section>
   )
 }

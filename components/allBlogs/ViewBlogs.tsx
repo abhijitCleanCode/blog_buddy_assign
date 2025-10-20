@@ -1,3 +1,5 @@
+"use client"
+
 import { trpc } from '@/lib/trpc/trpc-client'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
