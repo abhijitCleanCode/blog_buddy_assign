@@ -1,6 +1,6 @@
 const SkeletonForm = ({ rows = 4, cols = 4 }) => {
-  let colsTable = [];
-  let rowsTable = [];
+  const colsTable = [];
+  const rowsTable = [];
 
   for (let i = 0; i < cols; i++) {
     colsTable.push(
