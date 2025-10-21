@@ -123,7 +123,7 @@ const Footer = () => {
                         </div>
                     </div>
                 </div>
-                <div
+                {/* <div
                     className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
                     <p className="text-sm text-muted-foreground">
                         © 2025 Sudama Sol Tech & Health Care Pvt Ltd. All rights reserved.
@@ -136,7 +136,7 @@ const Footer = () => {
                             Terms of Services
                         </a>
                     </nav>
-                </div>
+                </div> */}
             </div>
         </footer>
     )
